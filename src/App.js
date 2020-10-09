@@ -41,7 +41,7 @@ function App() {
   const classes = useStyles();
   const [term, setTerm] = useState('');
 
-  const [searchMovies, { loading, error, data, fetchMore }] = useLazyQuery(SEARCH_MOVIES);
+  const [searchMovies, { loading, error, data, fetchMore, refetch }] = useLazyQuery(SEARCH_MOVIES);
   if (error) return <p>Error :( <br/> {JSON.stringify(error)}</p>;
 
   const handleKeyDown = (event) => {
@@ -52,7 +52,11 @@ function App() {
 
   const search = () => {
     if (term.length > 0) {
-      searchMovies({ variables: {term}})
+      if (refetch) {
+        refetch({term})
+      } else {
+        searchMovies({ variables: {term}})
+      }
     }
   }
 
